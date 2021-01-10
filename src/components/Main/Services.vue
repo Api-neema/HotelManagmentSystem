@@ -35,31 +35,25 @@
 <script>
 import Restaurant from "./Restaurant";
 import Car from "./CarRental";
+import Axios from "axios";
 export default {
   components: {
     Car,
     Restaurant,
   },
+  created: function () {
+    Axios.get("http://127.0.0.1:8000/api/services/")
+      .then((response) => {
+        this.Services = response.data.results;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
   data: () => ({
     car: false,
     restaurant: false,
-    Services: [
-      {
-        name: "Housekeeping",
-        description: "Housekeeping",
-        image: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-      },
-      {
-        name: "Restaurant reservation",
-        description: "Restaurant reservation",
-        image: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-      },
-      {
-        name: "Car rental",
-        description: "Car Rental",
-        image: "https://cdn.vuetifyjs.com/images/cards/docks.jpg",
-      },
-    ],
+    Services: [],
   }),
   methods: {
     showModal: function (name) {

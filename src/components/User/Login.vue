@@ -36,8 +36,10 @@
   </v-form>
 </template>
 <script>
+import Axios from "axios";
 export default {
   data: () => ({
+    user: "",
     valid: false,
     email: "",
     emailRules: [
@@ -49,10 +51,13 @@ export default {
   methods: {
     login: function () {
       //send to server
-      console.log(`email: ${this.email}`);
-      console.log(`password: ${this.password}`);
-      //server responds with user data
-      //add user data to store
+      Axios.get("http://127.0.0.1:8000/api/user/", { email: this.email })
+        .then((response) => {
+          this.user = response.data.results;
+          this.$store.state.user = this.user;
+          console.log(this.$store.state.user);
+        })
+        .catch((error) => console.log(error));
     },
   },
 };

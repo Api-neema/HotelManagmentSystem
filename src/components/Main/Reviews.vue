@@ -13,7 +13,7 @@
             ></v-rating>
           </div>
           <div>
-            <q>{{ review.review }}</q>
+            <q>{{ review.description }}</q>
           </div>
           <span class="author">{{ review.author }}</span>
         </v-row>
@@ -22,30 +22,22 @@
   </v-carousel>
 </template>
 <script>
+import Axios from "axios";
 export default {
+  created: function () {
+    Axios.get("http://127.0.0.1:8000/api/reviews/")
+      .then((response) => {
+        let reviews = response.data.results.map(function (review) {
+          review.rating = Number(review.rating);
+        });
+        this.Reviews = response.data.results;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
   data: () => ({
-    Reviews: [
-      {
-        review: " dont forget form validation ",
-        author: "Mohamed Raafat",
-        rating: 3,
-      },
-      {
-        review: " dont forget form validation ",
-        author: "Mohamed Raafat",
-        rating: 3,
-      },
-      {
-        review: " dont forget form validation ",
-        author: "Mohamed Raafat",
-        rating: 3,
-      },
-      {
-        review: " dont forget form validation ",
-        author: "Mohamed Raafat",
-        rating: 3,
-      },
-    ],
+    Reviews: [],
   }),
 };
 </script>

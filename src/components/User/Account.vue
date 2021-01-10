@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <v-row v-if="feedback">
-      <v-col cols="12"> <p>Hello Mohamed</p> </v-col>
+      <v-col cols="12">
+        <p>Hello {{ user.frist_name }}</p>
+      </v-col>
       <v-col cols="12">
         <v-textarea
           v-model="review"
@@ -30,19 +32,19 @@
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Name</v-col>
-            <v-col>Mohamed Ahmed Raafat</v-col>
+            <v-col>{{ user.frist_name }} {{ user.last_name }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Birthday</v-col>
-            <v-col>8/11/1997</v-col>
+            <v-col>{{ user.dob }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Gender</v-col>
-            <v-col>Male</v-col>
+            <v-col>{{ user.gender }}</v-col>
           </v-row>
         </v-card>
       </v-col>
@@ -52,13 +54,13 @@
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Email</v-col>
-            <v-col>mohamedraafat060@gmail.com</v-col>
+            <v-col>{{ user.email }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Mobile</v-col>
-            <v-col>+201125731861</v-col>
+            <v-col>+{{ user.mobileNumbe }}</v-col>
           </v-row>
         </v-card>
       </v-col>
@@ -155,6 +157,7 @@
   </v-container>
 </template>
 <script>
+import Axios from "axios";
 export default {
   data() {
     return {
@@ -163,6 +166,7 @@ export default {
       feedback: false,
       roomNumber: "",
       userRooms: [],
+      user: this.$store.state.user[0],
     };
   },
   methods: {
@@ -170,13 +174,19 @@ export default {
       console.log("payment complete");
     },
     submit: function () {
-      console.log(this.review);
-      console.log(this.rating);
+      Axios.post("http://127.0.0.1:8000/api/reviews/", {
+        description: this.review,
+        rating: this.rating,
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       this.feedback = false;
     },
-    test: function () {
-      console.log(this.roomNumber);
-    },
+    test: function () {},
   },
 };
 </script>

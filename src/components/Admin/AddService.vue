@@ -40,6 +40,7 @@
 
 
 <script>
+import Axios from "axios";
 export default {
   data: () => ({
     serviceName: "",
@@ -55,10 +56,12 @@ export default {
     submit: function () {
       let service = {
         serviceName: this.serviceName,
-        serviceDescription: this.serviceDescription,
+        description: this.serviceDescription,
         serviceImg: this.serviceImg,
       };
-      this.$refs.form.validate();
+      Axios.post("http://127.0.0.1:8000/api/services/", service)
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
       console.log(service);
     },
   },
