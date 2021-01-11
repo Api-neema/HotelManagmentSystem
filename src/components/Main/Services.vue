@@ -19,6 +19,7 @@
 
           <v-card-actions>
             <v-btn
+              v-if="$store.state.user.type == 'user'"
               color="primary"
               style="color: green"
               @click="showModal(item.name)"

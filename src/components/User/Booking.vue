@@ -21,7 +21,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="$store.state.user.type == 'user'">
       <v-form>
         <v-row>
           <v-col>
