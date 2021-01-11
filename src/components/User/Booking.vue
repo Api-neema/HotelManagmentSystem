@@ -25,56 +25,86 @@
       <v-form>
         <v-row>
           <v-col>
-            <label for="cars">Hotel</label>
+            <label for="hotels">Hotel</label>
 
-            <select v-model="hotel" name="hotels">
+            <select @focusout="hnameFocus = true" v-model="hotel" name="hotels">
               <option selected hidden value="">Choose Hotel</option>
               <option value="hotel1">hotel1</option>
               <option value="hotel2">hotel2</option>
               <option value="hotel3">hotel3</option>
             </select>
+
+            <span style="color: red" v-if="!$v.hotel.required && hnameFocus"
+              >Please choose a hotel</span
+            >
           </v-col>
 
           <v-col>
             <label for="start">Start</label>
             <input
+              @focusout="sdateFocus = true"
               v-model="startDate"
               name="start"
               type="date"
               min="2019-01-01"
               max="2022-01-01"
             />
+            <span style="color: red" v-if="!$v.startDate.required && sdateFocus"
+              >Please choose a start date</span
+            >
           </v-col>
           <v-col>
             <label for="end">End</label>
 
             <input
+              @focusout="edateFocus = true"
               v-model="endDate"
               name="end"
               type="date"
               min="2019-01-01"
               max="2022-01-01"
             />
+            <span style="color: red" v-if="!$v.endDate.required && edateFocus"
+              >Please choose an end date</span
+            >
           </v-col>
           <v-col>
             <label for="roomCapacity">Room Capacity</label>
 
-            <select v-model="roomType" name="roomCapacity">
+            <select
+              @focusout="roomCapacityFocus = true"
+              v-model="roomCapacity"
+              name="roomCapacity"
+            >
               <option selected hidden value="">Room Capacity</option>
-              <option value="standard">Standard Room</option>
-              <option value="deluxe">Deluxe Suite</option>
-              <option value="presidential">Presidential Suite</option>
-            </select>
-          </v-col>
-          <v-col>
-            <label for="roomType">Room Type</label>
-
-            <select v-model="roomType" name="roomType">
-              <option selected hidden value="">Room Type</option>
               <option value="single">Single</option>
               <option value="double">Double</option>
               <option value="triple">Triple</option>
             </select>
+            <span
+              style="color: red"
+              v-if="!$v.roomCapacity.required && roomCapacityFocus"
+              >Please choose a room capacity</span
+            >
+          </v-col>
+          <v-col>
+            <label for="roomType">Room Type</label>
+
+            <select
+              @focusout="roomTypeFocus = true"
+              v-model="roomType"
+              name="roomType"
+            >
+              <option selected hidden value="">Room Type</option>
+              <option value="standard">Standard Room</option>
+              <option value="deluxe">Deluxe Suite</option>
+              <option value="presidential">Presidential Suite</option>
+            </select>
+            <span
+              style="color: red"
+              v-if="!$v.roomType.required && roomTypeFocus"
+              >Please choose a room type</span
+            >
           </v-col>
 
           <v-col>
@@ -100,6 +130,8 @@
   </v-container>
 </template>
 <script>
+import Axios from "axios";
+import { required, alpha, email, numeric } from "vuelidate/lib/validators";
 export default {
   data: () => ({
     hotel: "",
@@ -107,6 +139,11 @@ export default {
     endDate: "",
     roomType: "",
     roomCapacity: "",
+    hnameFocus: false,
+    sdateFocus: false,
+    edateFocus: false,
+    roomTypeFocus: false,
+    roomCapacityFocus: false,
     Rooms: [
       {
         name: "Standard Room",
@@ -134,6 +171,25 @@ export default {
       },
     ],
   }),
+  validations: {
+    hotel: {
+      required,
+    },
+    startDate: {
+      required,
+    },
+
+    endDate: {
+      required,
+    },
+    roomType: {
+      required,
+    },
+    roomCapacity: {
+      required,
+    },
+  },
+
   methods: {
     book: function () {
       let book = {
@@ -143,7 +199,17 @@ export default {
         roomType: this.roomType,
         roomCapacity: this.roomCapacity,
       };
-      console.log(book);
+      if (!this.$v.$invalid) {
+        Axios.post("http://127.0.0.1:8000/api/user/", book)
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+      } else {
+        (this.hnameFocus = true),
+          (this.sdateFocus = true),
+          (this.edateFocus = true),
+          (this.roomTypeFocus = true),
+          (this.roomCapacityFocus = true);
+      }
     },
   },
 };

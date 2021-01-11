@@ -4,28 +4,48 @@
       <v-row>
         <v-col cols="12">
           <v-text-field
+            @focusout="snameFocus = true"
             v-model="serviceName"
             label="Service Name"
-            required
-            :rules="nameRules"
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="
+              (!$v.serviceName.required || !$v.serviceName.alpha) && snameFocus
+            "
+            >Please enter a valid service name</span
+          >
         </v-col>
 
         <v-col cols="12">
           <v-text-field
+            @focusout="sdescFocus = true"
             v-model="serviceDescription"
             label="Service Description"
-            required
-            :rules="nameRules"
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="
+              (!$v.serviceDescription.required ||
+                !$v.serviceDescription.alpha) &&
+              sdescFocus
+            "
+            >Please enter a valid service description</span
+          >
         </v-col>
         <v-col cols="12">
           <v-text-field
+            @focusout="simgFocus = true"
             v-model="serviceImg"
             label="Image URL"
-            required
-            :rules="nameRules"
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="
+              (!$v.serviceImg.required || !$v.serviceImg.alpha) && simgFocus
+            "
+            >Please enter a valid service img url</span
+          >
         </v-col>
 
         <v-col cols="12">
@@ -41,17 +61,30 @@
 
 <script>
 import Axios from "axios";
+import { required, alpha } from "vuelidate/lib/validators";
 export default {
   data: () => ({
     serviceName: "",
     serviceDescription: "",
     serviceImg: "",
-    nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => v.length <= 10 || "Name must be less than 10 characters",
-    ],
-    valid: false,
+    snameFocus: false,
+    sdescFocus: false,
+    simgFocus: false,
   }),
+  validations: {
+    serviceName: {
+      alpha,
+      required,
+    },
+    serviceDescription: {
+      alpha,
+      required,
+    },
+
+    serviceImg: {
+      required,
+    },
+  },
   methods: {
     submit: function () {
       let service = {
@@ -59,10 +92,15 @@ export default {
         description: this.serviceDescription,
         serviceImg: this.serviceImg,
       };
-      Axios.post("http://127.0.0.1:8000/api/services/", service)
-        .then((response) => console.log(response))
-        .catch((error) => console.log(error));
-      console.log(service);
+      if (!this.$v.$invalid) {
+        Axios.post("http://127.0.0.1:8000/api/user/", service)
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+      } else {
+        (this.snameFocus = true),
+          (this.sdescFocus = true),
+          (this.simgFocus = true);
+      }
     },
   },
 };

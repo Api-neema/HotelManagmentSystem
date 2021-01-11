@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-if="feedback">
       <v-col cols="12">
-        <p>Hello {{ user.frist_name }}</p>
+        <p>Hello {{ user.firstName }}</p>
       </v-col>
       <v-col cols="12">
         <v-textarea
@@ -32,13 +32,13 @@
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Name</v-col>
-            <v-col>{{ user.frist_name }} {{ user.last_name }}</v-col>
+            <v-col>{{ user.firstName }} {{ user.lastName }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Birthday</v-col>
-            <v-col>{{ user.dob }}</v-col>
+            <v-col>{{ user.dateOfBirth }}</v-col>
           </v-row>
 
           <hr />
@@ -60,7 +60,7 @@
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Mobile</v-col>
-            <v-col>+{{ user.mobileNumbe }}</v-col>
+            <v-col>{{ user.mobileNumber }}</v-col>
           </v-row>
         </v-card>
       </v-col>
@@ -166,7 +166,7 @@ export default {
       feedback: false,
       roomNumber: "",
       userRooms: [],
-      user: this.$store.state.user[0],
+      user: this.$store.state.user,
     };
   },
   methods: {

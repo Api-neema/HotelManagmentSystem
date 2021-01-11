@@ -1,15 +1,19 @@
 <template>
-  <v-form v-model="valid">
+  <v-form>
     <v-container>
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
           <v-text-field
+            @focusout="emailFocus = true"
             v-model="email"
-            :rules="emailRules"
             label="E-mail"
-            required
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="(!$v.email.email || !$v.email.required) && emailFocus"
+            >Please enter a valid email</span
+          >
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
@@ -17,10 +21,13 @@
         <v-col cols="3"> </v-col>
         <v-col cols="6">
           <v-text-field
+            @focusout="passFocus = true"
             v-model="password"
             label="Password"
-            required
           ></v-text-field>
+          <span v-if="!$v.password.required && passFocus" style="color: red"
+            >Please enter a password</span
+          >
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
@@ -36,28 +43,44 @@
   </v-form>
 </template>
 <script>
-import Axios from "axios";
+import { required, minLength, email } from "vuelidate/lib/validators";
+import Axios from 'axios'
+
 export default {
   data: () => ({
     user: "",
-    valid: false,
     email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+/.test(v) || "E-mail must be valid",
-    ],
     password: "",
+    emailFocus: false,
+    passFocus: false,
   }),
+  validations: {
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+    },
+  },
   methods: {
     login: function () {
-      //send to server
-      Axios.get("http://127.0.0.1:8000/api/user/", { email: this.email })
-        .then((response) => {
-          this.user = response.data.results;
-          this.$store.state.user = this.user;
-          console.log(this.$store.state.user);
+      if (!this.$v.$invalid) {
+        Axios.post("http://127.0.0.1:8000/api/user/loginCheck/", {
+          email: this.email,
+          password: this.password,
         })
-        .catch((error) => console.log(error));
+          .then((response) => {
+            this.user = response.data;
+            console.log(response);
+            this.$store.state.user = this.user;
+          })
+          .catch((error) => console.log(error));
+      }
+      else{
+        this.emailFocus=true,
+        this.passFocus=true
+      }
     },
   },
 };

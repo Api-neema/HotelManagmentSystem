@@ -1,15 +1,19 @@
 <template>
-  <v-form v-model="valid">
+  <v-form>
     <v-container>
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
           <v-text-field
-            v-model="firstname"
-            :rules="nameRules"
+            @focusout="fnameFocus = true"
+            v-model="firstName"
             label="First name"
-            required
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="(!$v.firstName.alpha || !$v.firstName.required) && fnameFocus"
+            >Please enter a valid name</span
+          >
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
@@ -17,11 +21,15 @@
         <v-col cols="3"> </v-col>
         <v-col cols="6">
           <v-text-field
-            v-model="lastname"
-            :rules="nameRules"
+            @focusout="lnameFocus = true"
+            v-model="lastName"
             label="Last name"
-            required
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="(!$v.lastName.alpha || !$v.lastName.required) && lnameFocus"
+            >Please enter a valid name</span
+          >
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
@@ -29,25 +37,33 @@
         <v-col cols="3"> </v-col>
         <v-col cols="6">
           <v-text-field
+            @focusout="emailFocus = true"
+            v-model="email"
+            label="E-mail"
+          ></v-text-field>
+          <span
+            style="color: red"
+            v-if="(!$v.email.email || !$v.email.required) && emailFocus"
+            >Please enter a valid email</span
+          >
+        </v-col>
+        <v-col cols="3"> </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="3"> </v-col>
+        <v-col cols="6">
+          <v-text-field
+            @focusout="passFocus = true"
             v-model="password"
             label="Password"
-            required
           ></v-text-field>
+          <span style="color: red" v-if="!$v.password.required && passFocus"
+            >Please enter a valid password</span
+          >
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="3"> </v-col>
-        <v-col cols="6">
-          <v-text-field
-            v-model="email"
-            :rules="emailRules"
-            label="E-mail"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="3"> </v-col>
-      </v-row>
+
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
@@ -59,32 +75,60 @@
   </v-form>
 </template>
 <script>
+import Axios from "axios";
+import { required, alpha, email, numeric } from "vuelidate/lib/validators";
+
 export default {
   data() {
     return {
-      valid: false,
-      firstname: "",
-      lastname: "",
-      userType: "manager",
-      nameRules: [
-        (v) => !!v || "Name is required",
-        (v) => v.length <= 10 || "Name must be less than 10 characters",
-      ],
+      firstName: "",
+      lastName: "",
       email: "",
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      ],
       password: "",
+
+      fnameFocus: false,
+      lnameFocus: false,
+      emailFocus: false,
+      passFocus: false,
     };
+  },
+  validations: {
+    firstName: {
+      alpha,
+      required,
+    },
+    lastName: {
+      alpha,
+      required,
+    },
+
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+    },
   },
   methods: {
     register: function () {
-      console.log(`firstname: ${this.firstname}`);
-      console.log(`lastname: ${this.lastname}`);
-      console.log(`usertype: ${this.userType}`);
-      console.log(`email: ${this.email}`);
-      console.log(`password: ${this.password}`);
+      let user = {
+        firstName: this.firstName,
+        lastName: this.lastName,
+        password: this.password,
+        email: this.email,
+        type: "manager",
+      };
+      if (!this.$v.$invalid) {
+        Axios.post("http://127.0.0.1:8000/api/user/", user)
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
+      } else {
+        (this.fnameFocus = true),
+          (this.lnameFocus = true),
+          (this.emailFocus = true),
+          (this.passFocus = true);
+      }
     },
   },
 };

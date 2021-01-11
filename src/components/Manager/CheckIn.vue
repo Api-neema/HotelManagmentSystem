@@ -5,11 +5,18 @@
         <v-col cols="4"></v-col>
         <v-col cols="4"
           ><v-text-field
+            @focusout="roomFocus = true"
             v-model="roomNumber"
             label="Room Number"
-            required
-          ></v-text-field
-        ></v-col>
+          ></v-text-field>
+          <span
+            style="color: red"
+            v-if="
+              (!$v.roomNumber.numeric || !$v.roomNumber.required) && roomFocus
+            "
+            >Please enter a valid room number</span
+          ></v-col
+        >
         <v-col cols="4"></v-col>
         <v-col cols="4"></v-col>
         <v-col cols="4"><v-btn @click="search" block>Search</v-btn></v-col>
@@ -61,23 +68,36 @@
   </v-container>
 </template>
 <script>
+import { required, numeric } from "vuelidate/lib/validators";
+import Axios from "axios";
 export default {
   data: () => ({
     roomNumber: "",
     roomDetails: "",
     extra: "",
+    roomFocus: false,
   }),
+  validations: {
+    roomNumber: {
+      required,
+      numeric,
+    },
+  },
   methods: {
     search: function () {
+      if (!this.$v.$invalid) {
+        this.roomDetails = {
+          number: 520,
+          customerName: "Mohamed Raafat",
+          type: "Double",
+          checkInStatus: false,
+          id: "25",
+        };
+      } else {
+        this.roomFocus = true;
+      }
       //send room number to server
       //retrieve room details from server
-      this.roomDetails = {
-        number: 520,
-        customerName: "Mohamed Raafat",
-        type: "Double",
-        checkInStatus: false,
-        id: "25",
-      };
     },
     checkIn: function () {
       //send room id to server to change status to true

@@ -6,21 +6,28 @@
       </v-col>
       <v-col cols="1"></v-col>
       <v-col cols="8">
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" lazy-validation>
           <v-text-field
+            @focusout="nameFocus = true"
             v-model="name"
-            :rules="nameRules"
             label="Name"
-            required
           ></v-text-field>
+          <span style="color: red" v-if="!$v.name.required && nameFocus"
+            >Please enter a valid name</span
+          >
 
           <v-text-field
+            @focusout="emailFocus = true"
             v-model="email"
-            :rules="emailRules"
             label="E-mail"
-            required
           ></v-text-field>
+          <span
+            style="color: red"
+            v-if="(!$v.email.email || !$v.email.required) && emailFocus"
+            >Please enter a valid email</span
+          >
           <v-textarea
+            @focusout="feedFocus = true"
             style="margin-left: -12px"
             name="input-7-1"
             background-color="white"
@@ -30,10 +37,11 @@
             value=""
             v-model="feedback"
           ></v-textarea>
+          <span style="color: red" v-if="!$v.feedback.required && feedFocus"
+            >Please enter a valid feedback</span
+          >
 
-          <v-btn :disabled="!valid" color="success" class="mr-4" @click="send">
-            Send
-          </v-btn>
+          <v-btn color="success" class="mr-4" @click="send"> Send </v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -46,26 +54,46 @@
 }
 </style>
 <script>
+import { required, alpha, email } from "vuelidate/lib/validators";
+import Axios from "axios";
+
 export default {
   data: () => ({
-    valid: true,
-    feedback: "",
     name: "",
-    nameRules: [(v) => !!v || "Name is required"],
     email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
-    select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: false,
+    feedback: "",
+    nameFocus: false,
+    emailFocus: false,
+    feedFocus: false,
   }),
+  validations: {
+    name: { required },
+    email: {
+      required,
+      email,
+    },
+    feedback: {
+      required,
+    },
+  },
 
   methods: {
     send() {
-      this.$refs.form.validate();
-      console.log(this.feedback);
+      if (!this.$v.$invalid) {
+        Axios.post("http://127.0.0.1:8000/api/user/loginCheck/", {
+          email: this.email,
+          password: this.password,
+        })
+          .then((response) => {
+            this.user = response.data;
+            console.log(response);
+            this.$store.state.user = this.user;
+          })
+          .catch((error) => console.log(error));
+      } else {
+        (this.nameFocus = true)((this.emailFocus = true)),
+          (this.feedFocus = true);
+      }
     },
   },
 };
