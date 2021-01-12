@@ -8,9 +8,7 @@
             v-model="hotelName"
             label="Hotel name"
           ></v-text-field>
-          <span
-            style="color: red"
-            v-if="(!$v.hotelName.alpha || !$v.hotelName.required) && hnameFocus"
+          <span style="color: red" v-if="!$v.hotelName.required && hnameFocus"
             >Please enter a valid hotel name</span
           >
         </v-col>
@@ -21,12 +19,7 @@
             v-model="hotelAddress"
             label="Hotel Address"
           ></v-text-field>
-          <span
-            style="color: red"
-            v-if="
-              (!$v.hotelAddress.alphaNum || !$v.hotelAddress.required) &&
-              addFocus
-            "
+          <span style="color: red" v-if="!$v.hotelAddress.required && addFocus"
             >Please enter a valid Address</span
           >
         </v-col>
@@ -89,7 +82,7 @@
 
 <script>
 import Axios from "axios";
-import { required, alpha, alphaNum, numeric } from "vuelidate/lib/validators";
+import { required, numeric } from "vuelidate/lib/validators";
 
 export default {
   data: () => ({
@@ -106,11 +99,9 @@ export default {
   }),
   validations: {
     hotelName: {
-      alpha,
       required,
     },
     hotelAddress: {
-      alphaNum,
       required,
     },
 
@@ -138,7 +129,7 @@ export default {
         tripleRooms: this.tripleRooms,
       };
       if (!this.$v.$invalid) {
-        Axios.post("http://127.0.0.1:8000/api/user/", hotel)
+        Axios.post("http://127.0.0.1:8000/api/hotel/", hotel)
           .then((response) => console.log(response))
           .catch((error) => console.log(error));
       } else {

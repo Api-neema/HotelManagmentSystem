@@ -28,10 +28,14 @@
             <label for="hotels">Hotel</label>
 
             <select @focusout="hnameFocus = true" v-model="hotel" name="hotels">
-              <option selected hidden value="">Choose Hotel</option>
-              <option value="hotel1">hotel1</option>
-              <option value="hotel2">hotel2</option>
-              <option value="hotel3">hotel3</option>
+              <option selected hidden value="">Choose hotel</option>
+              <option
+                v-for="hotel in hotels"
+                :key="hotel.hotelName"
+                :value="hotel.hotelName"
+              >
+                {{ hotel.hotelName }}
+              </option>
             </select>
 
             <span style="color: red" v-if="!$v.hotel.required && hnameFocus"
@@ -142,8 +146,19 @@
 import Axios from "axios";
 import { required, alpha, email, numeric } from "vuelidate/lib/validators";
 export default {
+  created: function () {
+    Axios.get(`http://127.0.0.1:8000/api/hotel/`, {})
+      .then((response) => {
+        this.hotels = response.data.results;
+        console.log(this.hotels);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
   data: () => ({
     hotel: "",
+    hotels: "",
     startDate: "",
     endDate: "",
     roomType: "",
@@ -203,12 +218,18 @@ export default {
 
   methods: {
     book: function () {
+      let roomNumber = Math.floor(Math.random() * 1000);
+
       let book = {
-        hotel: this.hotel,
+        user: this.$store.state.user.id,
+        roomNumber: roomNumber,
+        hotelName: this.hotel,
         startDate: this.startDate,
         endDate: this.endDate,
+        checkIn: false,
         roomType: this.roomType,
         roomCapacity: this.roomCapacity,
+        bookingType: true,
       };
       let numPeople = 0;
       switch (this.roomCapacity) {
@@ -246,7 +267,6 @@ export default {
           ? false
           : true;
       let fees = roomType * numPeople * date;
-      let roomNumber = Math.floor(Math.random() * 1000);
       let fee = {
         user: this.$store.state.user.id,
         room: roomNumber,
@@ -255,6 +275,9 @@ export default {
       };
       console.log(fee);
       if (!this.$v.$invalid && this.validDate1 && this.validDate2) {
+        Axios.post("http://127.0.0.1:8000/api/book/", book)
+          .then((response) => console.log(response))
+          .catch((error) => console.log(error));
         Axios.post("http://127.0.0.1:8000/api/fee/", fee)
           .then((response) => console.log(response))
           .catch((error) => console.log(error));

@@ -23,37 +23,28 @@
         <v-col cols="4"></v-col>
       </v-row>
     </v-form>
-    <v-form v-if="roomDetails">
+    <v-form v-if="room">
       <v-row>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4">
           <v-text-field
-            v-model="roomDetails.customerName"
-            label="Customer Name"
-            disabled
-            required
-          ></v-text-field>
-        </v-col>
-
-        <v-col cols="12" md="3">
-          <v-text-field
-            v-model="roomDetails.number"
+            v-model="room.roomNumber"
             label="Room Number"
             disabled
             required
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4">
           <v-text-field
-            v-model="roomDetails.type"
+            v-model="room.roomType"
             disabled
             label="Room Type"
             required
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="4">
           <v-text-field
-            v-model="roomDetails.checkInStatus"
+            v-model="room.checkIn"
             disabled
             label="Status"
             required
@@ -73,7 +64,7 @@ import Axios from "axios";
 export default {
   data: () => ({
     roomNumber: "",
-    roomDetails: "",
+    room: "",
     extra: "",
     roomFocus: false,
   }),
@@ -85,14 +76,21 @@ export default {
   },
   methods: {
     search: function () {
+      let room = "";
+
+      console.log(this.room);
       if (!this.$v.$invalid) {
-        this.roomDetails = {
-          number: 520,
-          customerName: "Mohamed Raafat",
-          type: "Double",
-          checkInStatus: false,
-          id: "25",
-        };
+        Axios.get("http://127.0.0.1:8000/api/book/")
+          .then((response) => {
+            room = response.data.results;
+            console.log(room);
+            room = room.filter((room) => {
+              return room.roomNumber == this.roomNumber;
+            });
+
+            this.room = room[0];
+          })
+          .catch((error) => console.log(error));
       } else {
         this.roomFocus = true;
       }
@@ -100,8 +98,10 @@ export default {
       //retrieve room details from server
     },
     checkIn: function () {
-      //send room id to server to change status to true
-      //send extras to housekeeping
+      Axios.put(`http://127.0.0.1:8000/api/book/${this.room.id}/`, {
+        user: this.room.user,
+        checkIn: true,
+      });
     },
   },
 };

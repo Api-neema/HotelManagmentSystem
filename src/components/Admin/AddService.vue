@@ -39,12 +39,20 @@
             v-model="serviceImg"
             label="Image URL"
           ></v-text-field>
+          <span style="color: red" v-if="!$v.serviceImg.required && simgFocus"
+            >Please enter a valid service img url</span
+          >
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            @focusout="feeFocus = true"
+            v-model="fee"
+            label="Fee"
+          ></v-text-field>
           <span
             style="color: red"
-            v-if="
-              (!$v.serviceImg.required || !$v.serviceImg.alpha) && simgFocus
-            "
-            >Please enter a valid service img url</span
+            v-if="(!$v.fee.required || !$v.fee.numeric) && feeFocus"
+            >Please enter a valid service fee</span
           >
         </v-col>
 
@@ -61,12 +69,13 @@
 
 <script>
 import Axios from "axios";
-import { required, alpha } from "vuelidate/lib/validators";
+import { required, alpha, numeric } from "vuelidate/lib/validators";
 export default {
   data: () => ({
     serviceName: "",
     serviceDescription: "",
     serviceImg: "",
+    fee: "",
     snameFocus: false,
     sdescFocus: false,
     simgFocus: false,
@@ -84,22 +93,29 @@ export default {
     serviceImg: {
       required,
     },
+    fee: {
+      required,
+      numeric,
+    },
   },
   methods: {
     submit: function () {
       let service = {
         serviceName: this.serviceName,
         description: this.serviceDescription,
-        serviceImg: this.serviceImg,
+        image: this.serviceImg,
+        fees: this.fee,
+        type: this.serviceName,
       };
       if (!this.$v.$invalid) {
-        Axios.post("http://127.0.0.1:8000/api/user/", service)
+        Axios.post("http://127.0.0.1:8000/api/services/", service)
           .then((response) => console.log(response))
           .catch((error) => console.log(error));
       } else {
         (this.snameFocus = true),
           (this.sdescFocus = true),
           (this.simgFocus = true);
+        this.feeFocus = true;
       }
     },
   },

@@ -202,7 +202,6 @@ export default {
         });
       this.feedback = false;
     },
-    test: function () {},
   },
 };
 </script>
