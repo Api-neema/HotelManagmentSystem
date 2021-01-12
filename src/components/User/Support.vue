@@ -32,11 +32,15 @@ export default {
   methods: {
     submit: function () {
       if (!this.$v.$invalid) {
-        Axios.post("http://127.0.0.1:8000/api/user/loginCheck/", {})
+        let feedback = {
+          userName:
+            this.$store.state.user.firstName + this.$store.state.user.lastName,
+          email: this.$store.state.user.email,
+          feedback: this.query,
+        };
+        Axios.post("http://127.0.0.1:8000/api/feedback/", feedback)
           .then((response) => {
-            this.user = response.data;
             console.log(response);
-            this.$store.state.user = this.user;
           })
           .catch((error) => console.log(error));
       } else {

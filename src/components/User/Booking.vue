@@ -235,7 +235,7 @@ export default {
       let date =
         Number(String(this.endDate).substr(8, 2)) -
         Number(String(this.startDate).substr(8, 2));
-      if (date <= 1) {
+      if (date <= 0) {
         this.validDate1 = false;
       } else {
         this.validDate1 = true;
@@ -248,10 +248,12 @@ export default {
       let fees = roomType * numPeople * date;
       let roomNumber = Math.floor(Math.random() * 1000);
       let fee = {
-        user: this.$store.state.user.email,
-        room: String(roomNumber),
+        user: this.$store.state.user.id,
+        room: roomNumber,
         totalFees: String(fees),
+        adminFees: String(fees),
       };
+      console.log(fee);
       if (!this.$v.$invalid && this.validDate1 && this.validDate2) {
         Axios.post("http://127.0.0.1:8000/api/fee/", fee)
           .then((response) => console.log(response))

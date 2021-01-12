@@ -80,14 +80,14 @@ export default {
   methods: {
     send() {
       if (!this.$v.$invalid) {
-        Axios.post("http://127.0.0.1:8000/api/user/loginCheck/", {
+        let feedback = {
+          userName: this.name,
           email: this.email,
-          password: this.password,
-        })
+          feedback: this.feedback,
+        };
+        Axios.post("http://127.0.0.1:8000/api/feedback/", feedback)
           .then((response) => {
-            this.user = response.data;
             console.log(response);
-            this.$store.state.user = this.user;
           })
           .catch((error) => console.log(error));
       } else {

@@ -107,7 +107,7 @@
             @focusout="dobFocus = true"
             v-model="dateOfBirth"
             label="Date of Birth"
-            placeholder="dd/mm/yyy"
+            placeholder="dd/mm/yyyy"
           ></v-text-field>
           <span style="color: red" v-if="!$v.dateOfBirth.required && dobFocus"
             >Please enter a valid date of birth</span

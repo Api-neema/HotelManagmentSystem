@@ -66,23 +66,26 @@
       </v-col>
       <v-col style="" cols="6">
         <v-card shaped style="padding: 20px; margin-left: 15px" width="80%">
-          <v-card-title> Payment info</v-card-title>
+          <v-card-title>
+            Payment info <v-spacer></v-spacer>
+            <v-btn><router-link to="/add-card">Add card</router-link></v-btn>
+          </v-card-title>
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Type</v-col>
-            <v-col>Credit card</v-col>
+            <v-col>{{ user.cardType }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Number</v-col>
-            <v-col>1111 **** **** **** 0000</v-col>
+            <v-col>{{ user.cardNumber }}</v-col>
           </v-row>
 
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Expiry Date</v-col>
-            <v-col>01/01</v-col>
+            <v-col>{{ user.expiryDate }}</v-col>
           </v-row>
         </v-card>
       </v-col>
@@ -93,24 +96,24 @@
             <v-spacer></v-spacer>
             <select
               @change="test()"
-              v-model="roomNumber"
-              v-if="userRooms.length != 0"
+              v-model="roomPrice"
+              v-if="user.fees.length != 1"
               name="roomType"
             >
               <option selected hidden value="">Choose Room</option>
               <option
-                v-for="room in userRooms"
-                :key="room.number"
-                :value="room.number"
+                v-for="room in user.fees"
+                :key="room.room"
+                :value="room.totalFees"
               >
-                {{ room.number }}
+                room: {{ room.room }}
               </option>
             </select>
           </v-card-title>
           <hr />
           <v-row justify="space-between">
             <v-col style="margin-left: 5px">Current Balance</v-col>
-            <v-col>540$</v-col>
+            <v-col>{{ roomPrice }}$</v-col>
           </v-row>
           <hr />
           <v-card-actions>
@@ -132,7 +135,9 @@
                   Privacy Policy
                 </v-card-title>
 
-                <v-card-text> Are you sure you want to pay 540$? </v-card-text>
+                <v-card-text>
+                  Are you sure you want to pay {{ roomPrice }}$?
+                </v-card-text>
 
                 <v-divider></v-divider>
 
@@ -164,15 +169,26 @@ export default {
       review: "",
       rating: 0,
       feedback: false,
-      roomNumber: "",
-      userRooms: [],
       user: this.$store.state.user,
+      roomPrice: this.$store.state.user.fees[0].totalFees,
     };
   },
   methods: {
     pay: function () {
-      console.log("payment complete");
+      let userRoom = this.user.fees.filter((room) => {
+        return room.totalFees == this.roomPrice;
+      });
+      Axios.put("http://127.0.0.1:8000/api/fee/1/", {
+        user: this.user.id,
+        room: userRoom[0].room,
+        totalFees: -this.roomPrice,
+      })
+        .then(function (response) {})
+        .catch(function (error) {
+          console.log(error);
+        });
     },
+
     submit: function () {
       Axios.post("http://127.0.0.1:8000/api/reviews/", {
         description: this.review,
@@ -207,5 +223,10 @@ select:focus {
   outline: none;
   border-color: #3acfff;
   box-shadow: 0 0 0 0.25rem rgba(0, 120, 250, 0.1);
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }
 </style>
