@@ -44,7 +44,7 @@
 </template>
 <script>
 import { required, minLength, email } from "vuelidate/lib/validators";
-import Axios from 'axios'
+import Axios from "axios";
 
 export default {
   data: () => ({
@@ -76,10 +76,9 @@ export default {
             this.$store.state.user = this.user;
           })
           .catch((error) => console.log(error));
-      }
-      else{
-        this.emailFocus=true,
-        this.passFocus=true
+        this.$router.push({ path: "/" });
+      } else {
+        (this.emailFocus = true), (this.passFocus = true);
       }
     },
   },

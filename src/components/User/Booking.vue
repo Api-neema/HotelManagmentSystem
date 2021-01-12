@@ -14,7 +14,7 @@
 
           <v-card-actions>
             <div>
-              <p>Price per night per person: {{ item.price }}</p>
+              <p>Price per night per person: {{ item.price }}$</p>
             </div>
           </v-card-actions>
         </v-card>
@@ -52,6 +52,12 @@
             <span style="color: red" v-if="!$v.startDate.required && sdateFocus"
               >Please choose a start date</span
             >
+            <span style="color: red" v-if="!validDate1"
+              >Start date must be before end date</span
+            >
+            <span style="color: red" v-if="!validDate2"
+              >Start date must be after today</span
+            >
           </v-col>
           <v-col>
             <label for="end">End</label>
@@ -66,6 +72,9 @@
             />
             <span style="color: red" v-if="!$v.endDate.required && edateFocus"
               >Please choose an end date</span
+            >
+            <span style="color: red" v-if="!validDate1"
+              >End date must be after start date</span
             >
           </v-col>
           <v-col>
@@ -144,6 +153,8 @@ export default {
     edateFocus: false,
     roomTypeFocus: false,
     roomCapacityFocus: false,
+    validDate1: true,
+    validDate2: true,
     Rooms: [
       {
         name: "Standard Room",
@@ -151,7 +162,7 @@ export default {
           "Featuring a balcony, this air conditioned double room offers a seating area with satellite/cable TV and a work desk. The bathroom offers a shower and a bath and complimentary toiletries.",
         image:
           "https://cf.bstatic.com/xdata/images/hotel/max1024x768/203567707.jpg?k=01157cd143bed0215af2a58347fdbcbfe1c1305e24caf20688b2ba5e54230f09&o=",
-        price: "300$",
+        price: 300,
       },
       {
         name: "Deluxe Suite",
@@ -159,7 +170,7 @@ export default {
           "Featuring a balcony with partial view of the Nile, this spacious, air-conditioned suite offers a blend of French and Oriental décor. It includes a separate living room with a flat-screen TV, a mini-bar and free WiFi .",
         image:
           "https://cf.bstatic.com/xdata/images/hotel/max1024x768/42173392.jpg?k=ba100501be29fc6ec21ddd8039b14aa55b87cf202365ddb34fc8ba9bd901ca14&o=",
-        price: "500$",
+        price: 500,
       },
       {
         name: "Presidential Suite",
@@ -167,7 +178,7 @@ export default {
           "Featuring a balcony with a view, this spacious air conditioned Presidential Suite offers a seating area with cable TV, mini bar and a work desk. The bathroom offers a shower and a bath and complimentary toiletries.",
         image:
           "https://cf.bstatic.com/xdata/images/hotel/max1024x768/7857097.jpg?k=3e5ab613492778e32171b7f786f85542fcdad63f2801e813de5a990023908fa8&o=  ",
-        price: "800$",
+        price: 800,
       },
     ],
   }),
@@ -199,8 +210,50 @@ export default {
         roomType: this.roomType,
         roomCapacity: this.roomCapacity,
       };
-      if (!this.$v.$invalid) {
-        Axios.post("http://127.0.0.1:8000/api/user/", book)
+      let numPeople = 0;
+      switch (this.roomCapacity) {
+        case "single":
+          numPeople = 1;
+          break;
+        case "double":
+          numPeople = 2;
+          break;
+        default:
+          numPeople = 3;
+      }
+      let roomType = 0;
+      switch (this.roomCapacity) {
+        case "Standard Room":
+          roomType = 300;
+          break;
+        case "Deluxe Suite":
+          roomType = 500;
+          break;
+        default:
+          roomType = 800;
+      }
+      let date =
+        Number(String(this.endDate).substr(8, 2)) -
+        Number(String(this.startDate).substr(8, 2));
+      if (date <= 1) {
+        this.validDate1 = false;
+      } else {
+        this.validDate1 = true;
+      }
+      let today = new Date();
+      this.validDate2 =
+        today.getDate() - Number(String(this.startDate).substr(8, 2)) >= 1
+          ? false
+          : true;
+      let fees = roomType * numPeople * date;
+      let roomNumber = Math.floor(Math.random() * 1000);
+      let fee = {
+        user: this.$store.state.user.email,
+        room: String(roomNumber),
+        totalFees: String(fees),
+      };
+      if (!this.$v.$invalid && this.validDate1 && this.validDate2) {
+        Axios.post("http://127.0.0.1:8000/api/fee/", fee)
           .then((response) => console.log(response))
           .catch((error) => console.log(error));
       } else {

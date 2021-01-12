@@ -11,7 +11,9 @@
           <v-img class="white--text align-end" height="200px" :src="item.image">
           </v-img>
 
-          <v-card-subtitle class="pb-0"> {{ item.name }} </v-card-subtitle>
+          <v-card-subtitle class="pb-0">
+            {{ item.serviceName }}
+          </v-card-subtitle>
 
           <v-card-text class="text--primary">
             <div>{{ item.description }}</div>
@@ -22,7 +24,7 @@
               v-if="$store.state.user.type == 'user'"
               color="primary"
               style="color: green"
-              @click="showModal(item.name)"
+              @click="showModal(item.serviceName)"
               text
             >
               Book
@@ -62,6 +64,7 @@ export default {
         this.car = true;
       } else if (name == "Restaurant reservation") {
         this.restaurant = true;
+      } else {
       }
     },
     hide: function () {

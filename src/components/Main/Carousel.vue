@@ -13,16 +13,17 @@ export default {
     return {
       items: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
+          src:
+            "https://www.hilton.com/im/en/NoHotel/14808086/545-por-winter-image-for-web-licensed-shutterstock-1277023897.jpg?impolicy=crop&cw=5000&ch=1315&gravity=NorthWest&xposition=0&yposition=1268&rw=1920&rh=505",
         },
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
+          src:
+            "https://www.hilton.com/im/en/KHNLSQQ/14342285/curio-lushan-1809.jpg?impolicy=crop&cw=4574&ch=1203&gravity=NorthWest&xposition=0&yposition=898&rw=1920&rh=505",
         },
+
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
+          src:
+            "https://media.kempinski.com/34397312/mow_1920x1080px.jpg;width=1905;height=794;mode=crop;anchor=middlecenter;autorotate=true;quality=85;scale=both;progressive=true;encoder=freeimage;format=jpg",
         },
       ],
     };

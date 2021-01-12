@@ -4,7 +4,11 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="fnameFocus = true" v-model="firstName" label="First name"></v-text-field>
+          <v-text-field
+            @focusout="fnameFocus = true"
+            v-model="firstName"
+            label="First name"
+          ></v-text-field>
           <span
             style="color: red"
             v-if="(!$v.firstName.alpha || !$v.firstName.required) && fnameFocus"
@@ -16,7 +20,11 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="lnameFocus = true" v-model="lastName" label="Last name"></v-text-field>
+          <v-text-field
+            @focusout="lnameFocus = true"
+            v-model="lastName"
+            label="Last name"
+          ></v-text-field>
           <span
             style="color: red"
             v-if="(!$v.lastName.alpha || !$v.lastName.required) && lnameFocus"
@@ -28,7 +36,11 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="emailFocus = true" v-model="email" label="E-mail"></v-text-field>
+          <v-text-field
+            @focusout="emailFocus = true"
+            v-model="email"
+            label="E-mail"
+          ></v-text-field>
           <span
             style="color: red"
             v-if="(!$v.email.email || !$v.email.required) && emailFocus"
@@ -37,13 +49,15 @@
         </v-col>
         <v-col cols="3"> </v-col>
       </v-row>
-            <v-row>
+      <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="passFocus = true" v-model="password" label="Password"></v-text-field>
-          <span
-            style="color: red"
-            v-if="( !$v.password.required) && passFocus"
+          <v-text-field
+            @focusout="passFocus = true"
+            v-model="password"
+            label="Password"
+          ></v-text-field>
+          <span style="color: red" v-if="!$v.password.required && passFocus"
             >Please enter a valid password</span
           >
         </v-col>
@@ -53,13 +67,17 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="numberFocus = true"
+          <v-text-field
+            @focusout="numberFocus = true"
             v-model="mobileNumber"
             label="Mobile Number"
           ></v-text-field>
           <span
             style="color: red"
-            v-if="(!$v.mobileNumber.numeric || !$v.mobileNumber.required) && numberFocus"
+            v-if="
+              (!$v.mobileNumber.numeric || !$v.mobileNumber.required) &&
+              numberFocus
+            "
             >Please enter a valid mobile number</span
           >
         </v-col>
@@ -68,14 +86,15 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="genderFocus = true"
+          <v-text-field
+            @focusout="genderFocus = true"
             v-model="gender"
             label="Gender"
             placeholder="Male/Female"
           ></v-text-field>
           <span
             style="color: red"
-            v-if="(!$v.gender.required||!$v.gender.alpha) && genderFocus"
+            v-if="(!$v.gender.required || !$v.gender.alpha) && genderFocus"
             >Please enter a valid gender</span
           >
         </v-col>
@@ -84,14 +103,13 @@
       <v-row>
         <v-col cols="3"> </v-col>
         <v-col cols="6">
-          <v-text-field @focusout="dobFocus = true"
+          <v-text-field
+            @focusout="dobFocus = true"
             v-model="dateOfBirth"
             label="Date of Birth"
             placeholder="dd/mm/yyy"
           ></v-text-field>
-          <span
-            style="color: red"
-            v-if="( !$v.dateOfBirth.required) && dobFocus"
+          <span style="color: red" v-if="!$v.dateOfBirth.required && dobFocus"
             >Please enter a valid date of birth</span
           >
         </v-col>
@@ -122,13 +140,13 @@ export default {
       gender: "",
       mobileNumber: "",
       dateOfBirth: "",
-      emailFocus:false,
-      fnameFocus:false,
-      lnameFocus:false,
-      passFocus:false,
-      genderFocus:false,
-      numberFocus:false,
-      dobFocus:false
+      emailFocus: false,
+      fnameFocus: false,
+      lnameFocus: false,
+      passFocus: false,
+      genderFocus: false,
+      numberFocus: false,
+      dobFocus: false,
     };
   },
   validations: {
@@ -150,7 +168,7 @@ export default {
     },
     gender: {
       required,
-      alpha
+      alpha,
     },
     mobileNumber: {
       required,
@@ -176,14 +194,15 @@ export default {
         Axios.post("http://127.0.0.1:8000/api/user/", user)
           .then((response) => console.log(response))
           .catch((error) => console.log(error));
-      } else{
-        this.emailFocus=true,
-        this.fnameFocus=true,
-        this.lnameFocus=true,
-        this.passFocus=true,
-        this.genderFocus=true,
-        this.numberFocus=true,
-        this.dobFocus=true
+        this.$router.push({ path: "/" });
+      } else {
+        (this.emailFocus = true),
+          (this.fnameFocus = true),
+          (this.lnameFocus = true),
+          (this.passFocus = true),
+          (this.genderFocus = true),
+          (this.numberFocus = true),
+          (this.dobFocus = true);
       }
     },
   },
