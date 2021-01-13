@@ -25,7 +25,7 @@
     </v-form>
     <v-form v-if="room">
       <v-row>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-text-field
             v-model="room.roomNumber"
             label="Room Number"
@@ -34,7 +34,7 @@
           ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-text-field
             v-model="room.roomType"
             disabled
@@ -42,7 +42,7 @@
             required
           ></v-text-field>
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="3">
           <v-text-field
             v-model="room.checkIn"
             disabled
@@ -50,6 +50,15 @@
             required
           ></v-text-field>
         </v-col>
+        <v-col cols="12" md="3">
+          <v-text-field
+            v-model="room.accepted"
+            disabled
+            label="Accepted"
+            required
+          ></v-text-field>
+        </v-col>
+
         <v-col cols="12">
           <v-text-field v-model="extra" label="Extras" required></v-text-field>
         </v-col>
@@ -89,6 +98,9 @@ export default {
             });
 
             this.room = room[0];
+            if (this.room.accepted == null) {
+              this.room.accepted = "pending";
+            }
           })
           .catch((error) => console.log(error));
       } else {

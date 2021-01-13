@@ -24,11 +24,13 @@
               v-if="$store.state.user.type == 'user'"
               color="primary"
               style="color: green"
-              @click="showModal(item.serviceName)"
+              @click="showModal(item.serviceName, item.fees, item.id)"
               text
             >
               Book
             </v-btn>
+            <v-spacer></v-spacer>
+            {{ item.fees }}$
           </v-card-actions>
         </v-card>
       </v-col>
@@ -53,13 +55,36 @@ export default {
         console.log(error);
       });
   },
-  data: () => ({
-    car: false,
-    restaurant: false,
-    Services: [],
-  }),
+  data() {
+    return {
+      car: false,
+      restaurant: false,
+      Services: [],
+      user: this.$store.state.user,
+    };
+  },
   methods: {
-    showModal: function (name) {
+    showModal: function (name, fee, id) {
+      let random = Math.floor(Math.random() * this.user.fees.length);
+
+      let book = {
+        user: this.user.id,
+        roomNumber: this.user.fees[random].room,
+        bookingType: false,
+        service: id,
+      };
+      console.log(book.room);
+      Axios.post("http://127.0.0.1:8000/api/book/", book)
+        .then((response) => console.log(response))
+        .catch((error) => console.log(error));
+      console.log(this.user);
+      Axios.put(`http://127.0.0.1:8000/api/fee/${id}/`, {
+        user: this.user.id,
+        room: this.user.fees[random].room,
+        totalFees: fee,
+      });
+      console.log("Housekeeping requested successfully");
+
       if (name == "Car rental") {
         this.car = true;
       } else if (name == "Restaurant reservation") {

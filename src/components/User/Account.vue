@@ -95,7 +95,6 @@
             Balance
             <v-spacer></v-spacer>
             <select
-              @change="test()"
               v-model="roomPrice"
               v-if="user.fees.length != 1"
               name="roomType"
@@ -164,13 +163,20 @@
 <script>
 import Axios from "axios";
 export default {
+  created: function () {
+    if (this.$store.state.user.fees[0].totalFees) {
+      this.roomPrice = this.$store.state.user.fees[0].totalFees;
+    } else {
+      this.roomPrice = 0;
+    }
+  },
   data() {
     return {
       review: "",
       rating: 0,
       feedback: false,
       user: this.$store.state.user,
-      roomPrice: this.$store.state.user.fees[0].totalFees,
+      roomPrice: "",
     };
   },
   methods: {
@@ -193,6 +199,7 @@ export default {
       Axios.post("http://127.0.0.1:8000/api/reviews/", {
         description: this.review,
         rating: this.rating,
+        userName: this.user.firstName + " " + this.user.lastName,
       })
         .then(function (response) {
           console.log(response);

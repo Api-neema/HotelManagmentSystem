@@ -30,17 +30,7 @@
                 >
               </v-list-item-content>
             </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon>mdi-home-city</v-icon>
-              </v-list-item-icon>
 
-              <v-list-item-content>
-                <v-list-item-title @click="showServices"
-                  >Services</v-list-item-title
-                >
-              </v-list-item-content>
-            </v-list-item>
             <v-list-item>
               <v-list-item-icon>
                 <v-icon>mdi-email</v-icon>
@@ -65,13 +55,11 @@
 </template>
 <script>
 import Account from "./Account";
-import Services from "./Services";
 import Support from "./Support";
 
 export default {
   components: {
     Account,
-    Services,
     Support,
   },
   data() {

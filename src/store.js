@@ -4,7 +4,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         user: {
-            type:'manager',
+            type:'admin',
             
         }
     },

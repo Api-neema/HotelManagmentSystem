@@ -190,9 +190,21 @@ export default {
         dateOfBirth: `${this.dateOfBirth}`,
         type: "user",
       };
+
       if (!this.$v.$invalid) {
         Axios.post("http://127.0.0.1:8000/api/user/", user)
-          .then((response) => console.log(response))
+          .then((response) => {
+            console.log(response.data);
+            let fee = {
+              user: response.data.id,
+              room: 0,
+              totalFees: 0,
+              adminFees: 0,
+            };
+            Axios.post("http://127.0.0.1:8000/api/fee/", fee)
+              .then((response) => console.log(response))
+              .catch((error) => console.log(error));
+          })
           .catch((error) => console.log(error));
         this.$router.push({ path: "/" });
       } else {

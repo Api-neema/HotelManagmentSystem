@@ -7,57 +7,85 @@
     >
       <v-card-title>
         <p>
-          {{ request.customerName }} requested housekeeping at room number
-          {{ request.roomNumber }}
+          {{ request.serviceName }} requested at Room {{ request.roomNumber }}
         </p>
         <v-spacer></v-spacer>
-        <v-btn @click="done(request.id)">Done</v-btn>
+        <v-btn @click="accept(request.id, request.user)">Accept</v-btn>
+        <v-btn @click="reject(request.id, request.user)">Reject</v-btn>
       </v-card-title>
     </v-card>
   </v-container>
 </template>
 <script>
+import Axios from "axios";
 export default {
+  created: function () {
+    let requests = [];
+    Axios.get("http://127.0.0.1:8000/api/book/", {})
+      .then((response) => {
+        requests = response.data.results;
+        requests = requests.filter(function (request) {
+          return request.accepted == null && request.bookingType == false;
+        });
+        requests = requests.map(function (request) {
+          let req = request;
+          switch (req.service) {
+            case 1:
+              req.serviceName = "Housekeeping";
+              break;
+            case 2:
+              req.serviceName = "Restaurant reservation";
+              break;
+            case 3:
+              req.serviceName = "Car rental";
+              break;
+          }
+
+          return req;
+        });
+
+        this.requests = requests;
+        console.log(this.requests);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
   data: () => ({
-    requests: [
-      {
-        id: "123",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-      {
-        id: "4124",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-      {
-        id: "41",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-      {
-        id: "123224",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-      {
-        id: "1523",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-      {
-        id: "12663",
-        customerName: "Mohamed Raafat",
-        roomNumber: "30",
-      },
-    ],
+    requests: "",
   }),
   methods: {
-    done: function (id) {
+    accept: function (id, userId) {
+      Axios.put(`http://127.0.0.1:8000/api/book/${id}/`, {
+        user: userId,
+        accepted: true,
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
       this.requests = this.requests.filter(function (value, index, arr) {
         return value.id != id;
       });
-      console.log(`finished request number ${id}`);
+      console.log(`accepted request number ${id}`);
+    },
+    reject: function (id, userId) {
+      Axios.put(`http://127.0.0.1:8000/api/book/${id}/`, {
+        user: userId,
+        accepted: false,
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.requests = this.requests.filter(function (value, index, arr) {
+        return value.id != id;
+      });
+      console.log(`rejected request number ${id}`);
     },
   },
 };

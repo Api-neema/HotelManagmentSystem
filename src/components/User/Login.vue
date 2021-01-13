@@ -72,23 +72,26 @@ export default {
         })
           .then((response) => {
             this.user = response.data;
+            console.log(this.user);
             Axios.get(`http://127.0.0.1:8000/api/fee/`, {}).then((response) => {
               let user1 = this.user;
 
               this.user.fees = response.data.results.filter(function (fee) {
                 return fee.user == user1.id && fee.totalFees != 0;
               });
-            });
-
-            Axios.get(
-              `http://127.0.0.1:8000/api/card/${this.user.card}/`,
-              {}
-            ).then((response) => {
-              this.user.cardNumber = response.data.cardNumber;
-              this.user.cardType = response.data.cardType;
-              this.user.expiryDate = response.data.expiryDate;
               this.$store.state.user = this.user;
             });
+            if (this.user.card) {
+              Axios.get(
+                `http://127.0.0.1:8000/api/card/${this.user.card}/`,
+                {}
+              ).then((response) => {
+                this.user.cardNumber = response.data.cardNumber;
+                this.user.cardType = response.data.cardType;
+                this.user.expiryDate = response.data.expiryDate;
+                this.$store.state.user = this.user;
+              });
+            }
           })
           .catch((error) => console.log(error));
 

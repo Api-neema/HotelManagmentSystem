@@ -52,7 +52,7 @@
           <span
             style="color: red"
             v-if="(!$v.fee.required || !$v.fee.numeric) && feeFocus"
-            >Please enter a valid service fee</span
+            >Please enter a valid service fee in $</span
           >
         </v-col>
 

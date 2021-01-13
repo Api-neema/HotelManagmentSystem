@@ -36,7 +36,7 @@ export default {
           return req;
         });
         requests = requests.filter(function (request) {
-          return request.accepted == null;
+          return request.accepted == null && request.bookingType == true;
         });
         this.requests = requests;
         console.log(this.requests);

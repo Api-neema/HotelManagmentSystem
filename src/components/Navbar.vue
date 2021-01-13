@@ -9,11 +9,7 @@
         to="/manager/housekeeping"
         >Housekeeping Requests</router-link
       >
-      <router-link
-        v-if="$store.state.user.type == 'manager'"
-        to="/manager/schedule"
-        >Schedule</router-link
-      >
+      <router-link v-if="false" to="/manager/schedule">Schedule</router-link>
       <router-link
         v-if="$store.state.user.type == 'manager'"
         to="/manager/check-out"
@@ -42,11 +38,7 @@
         to="/admin/add-hotel"
         >Add Hotel</router-link
       >
-      <router-link
-        v-if="$store.state.user.type == 'admin'"
-        to="/admin/statistics"
-        >Statistics</router-link
-      >
+      <router-link v-if="false" to="/admin/statistics">Statistics</router-link>
       <router-link
         v-if="$store.state.user.type == '' || $store.state.user.type == 'user'"
         to="/booking"

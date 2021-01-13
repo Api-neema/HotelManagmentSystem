@@ -15,7 +15,7 @@
           <div>
             <q>{{ review.description }}</q>
           </div>
-          <span class="author">{{ review.author }}</span>
+          <span class="author">{{ review.userName }}</span>
         </v-row>
       </v-sheet>
     </v-carousel-item>
