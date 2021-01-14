@@ -27,7 +27,6 @@ router.register(r'feedback' , feedbackApi)
 router.register(r'book'     , bookingApi)
 router.register(r'sightseeing'     , queryApi)
 
-# router.register(r'test'      , testApi , basename='conductedFees')
 
 
 

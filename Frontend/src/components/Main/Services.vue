@@ -69,7 +69,7 @@ export default {
 
       let book = {
         user: this.user.id,
-        roomNumber: this.user.fees[random].room,
+        roomNumber: this.user.fees[1].room,
         bookingType: false,
         service: id,
       };
@@ -80,10 +80,11 @@ export default {
       console.log(this.user);
       Axios.put(`http://127.0.0.1:8000/api/fee/${id}/`, {
         user: this.user.id,
-        room: this.user.fees[random].room,
+        room: this.user.fees[1].room,
         totalFees: fee,
       });
       alert("Request submitted successfully");
+      location.reload();
 
       if (name == "Car rental") {
         this.car = true;
