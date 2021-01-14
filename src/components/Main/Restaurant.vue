@@ -78,7 +78,8 @@ export default {
         time: this.time,
         date: this.date,
       };
-      console.log(restaurant);
+      alert("Request submitted successfully");
+
       this.close();
     },
   },

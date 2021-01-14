@@ -39,6 +39,9 @@
         >Add Hotel</router-link
       >
       <router-link v-if="false" to="/admin/statistics">Statistics</router-link>
+      <router-link v-if="$store.state.user.type == 'user'" to="/sightseeing"
+        >Sightseeing</router-link
+      >
       <router-link
         v-if="$store.state.user.type == '' || $store.state.user.type == 'user'"
         to="/booking"

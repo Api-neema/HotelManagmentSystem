@@ -1,6 +1,7 @@
 import Main from './components/Main/Main'
 import Login from './components/User/Login'
 import Register from './components/User/Register'
+import Sightseeing from './components/User/Sightseeing'
 import Services from './components/Main/Services'
 import Profile from './components/User/Profile'
 import AddCard from './components/User/AddCard'
@@ -24,6 +25,7 @@ export default [
     { path: '/profile', component: Profile },
     { path: '/add-card', component: AddCard },
     { path: '/booking', component: Booking },
+    { path: '/sightseeing', component: Sightseeing },
     { path: '/admin/add-hotel', component: AddHotel },
     { path: '/admin/requests', component: Requests },
     { path: '/admin/statistics', component: Statistics },

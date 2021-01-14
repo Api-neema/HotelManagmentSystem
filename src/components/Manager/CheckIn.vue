@@ -92,7 +92,6 @@ export default {
         Axios.get("http://127.0.0.1:8000/api/book/")
           .then((response) => {
             room = response.data.results;
-            console.log(room);
             room = room.filter((room) => {
               return room.roomNumber == this.roomNumber;
             });
@@ -101,6 +100,7 @@ export default {
             if (this.room.accepted == null) {
               this.room.accepted = "pending";
             }
+            alert("Request submitted successfully");
           })
           .catch((error) => console.log(error));
       } else {

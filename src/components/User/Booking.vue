@@ -276,7 +276,7 @@ export default {
       console.log(fee);
       if (!this.$v.$invalid && this.validDate1 && this.validDate2) {
         Axios.post("http://127.0.0.1:8000/api/book/", book)
-          .then((response) => console.log(response))
+          .then((response) => alert("Request submitted successfully"))
           .catch((error) => console.log(error));
         Axios.post("http://127.0.0.1:8000/api/fee/", fee)
           .then((response) => console.log(response))

@@ -72,7 +72,7 @@ export default {
         startDate: this.startDate,
         endDate: this.endDate,
       };
-      console.log(car);
+      alert("Request submitted successfully");
       this.close();
     },
   },

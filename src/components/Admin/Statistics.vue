@@ -7,12 +7,27 @@
   ></v-data-table>
 </template>
 <script>
+import Axios from "axios";
+
 export default {
+  created: function () {
+    let requests = [];
+    Axios.get("http://127.0.0.1:8000/api/fee/", {})
+      .then((response) => {
+        this.data = response.data.results;
+        console.log(this.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  },
+
   data() {
     return {
+      data: "",
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "Room",
           align: "start",
           sortable: false,
           value: "name",

@@ -202,7 +202,7 @@ export default {
         userName: this.user.firstName + " " + this.user.lastName,
       })
         .then(function (response) {
-          console.log(response);
+          alert("Request submitted successfully");
         })
         .catch(function (error) {
           console.log(error);

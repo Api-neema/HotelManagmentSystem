@@ -121,7 +121,7 @@ export default {
       };
       if (!this.$v.$invalid) {
         Axios.post("http://127.0.0.1:8000/api/user/", user)
-          .then((response) => console.log(response))
+          .then((response) => alert("Request submitted successfully"))
           .catch((error) => console.log(error));
       } else {
         (this.fnameFocus = true),

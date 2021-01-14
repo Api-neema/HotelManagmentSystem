@@ -106,7 +106,7 @@ export default {
               `http://127.0.0.1:8000/api/user/${this.$store.state.user.id}/`,
               { card: response.data.id }
             )
-              .then((response) => console.log(response))
+              .then((response) => alert("Request submitted successfully"))
               .catch((error) => console.log(error));
           })
           .catch((error) => console.log(error));

@@ -83,7 +83,7 @@ export default {
         room: this.user.fees[random].room,
         totalFees: fee,
       });
-      console.log("Housekeeping requested successfully");
+      alert("Request submitted successfully");
 
       if (name == "Car rental") {
         this.car = true;

@@ -87,7 +87,7 @@ export default {
         };
         Axios.post("http://127.0.0.1:8000/api/feedback/", feedback)
           .then((response) => {
-            console.log(response);
+            alert("Request submitted successfully");
           })
           .catch((error) => console.log(error));
       } else {

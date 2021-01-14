@@ -1,12 +1,12 @@
 <template>
   <v-form>
     <v-container>
-      <p>Tell us your issue and we'll respond to you as soon as possible</p>
+      <p>Tell us what do you have in mind, where do you want to go?</p>
       <v-textarea
         @focusout="queryFocus = true"
         v-model="query"
         name="input-7-1"
-        label="Write your problem here"
+        label="Tell us the exact locations and when you want to visit them and we'll arragne it for you "
       ></v-textarea>
       <span style="color: red" v-if="!$v.query.required && queryFocus"
         >Please enter a valid query</span
@@ -36,9 +36,10 @@ export default {
           userName:
             this.$store.state.user.firstName + this.$store.state.user.lastName,
           email: this.$store.state.user.email,
-          feedback: this.query,
+          query: this.query,
+          user: this.$store.state.user.id,
         };
-        Axios.post("http://127.0.0.1:8000/api/feedback/", feedback)
+        Axios.post("http://127.0.0.1:8000/api/sightseeing/", feedback)
           .then((response) => {
             alert("Request submitted successfully");
           })
