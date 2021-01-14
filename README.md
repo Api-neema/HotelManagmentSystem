@@ -9,36 +9,30 @@ cd HotelManagmentSystem/
 ```
 cd Backend/
 ```
-open console 
-create a virtual environment using (you must have python 3.x installed)
+open console (powershell preferred) 
+create a virtual environment using Conda (you must have Anaconda installed)
 ```
-python3 -m venv /path/to/new/virtual/environment
+conda create --name software
 ```
 activate it using 
-if Linux 
-```
-$ source <venv>/bin/activate
-```
+
 if windows 
 ```
-C:\> /path/to/new/virtual/environment\Scripts\activate.bat
+conda activate software
 ```
-cd into the project directory
- install the requirements.txt file
+install the requirements.txt file
 ```
-pip install -r requirements.txt
+pip install -r --user requirements.txt
 ```
- run command
+create a super user using the command
+```
+python manage.py createsuperuser
+```
+to run the server use the command
 ```
  python manage.py runserver'
 ```
- to go to the dashboard:
-	A - to create super user run command
-	``` 
-	python manage.py createsuperuser'
-	```  
-	B - go to 'localhost/appadmin' 
-	C - sign in with your super user account
+ open the server at the link showing in the terminal
 # Frontend  
 ```
 cd ../Frontend/
@@ -50,3 +44,4 @@ npm install
 ```
 npm run serv
 ```
+open the frontend server in the link showing
