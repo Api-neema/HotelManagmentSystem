@@ -10,13 +10,14 @@ cd HotelManagmentSystem/
 cd Backend/
 ```
 open console (powershell preferred) 
+
 create a virtual environment using Conda (you must have Anaconda installed)
 ```
 conda create --name software
 ```
 activate it using 
 
-if windows 
+
 ```
 conda activate software
 ```
@@ -42,6 +43,6 @@ To run the frontend server use the following commands (you need nodeJS installed
 npm install
 ```
 ```
-npm run serv
+npm run serve
 ```
 open the frontend server in the link showing
