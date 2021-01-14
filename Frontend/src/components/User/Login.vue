@@ -77,7 +77,7 @@ export default {
               let user1 = this.user;
 
               this.user.fees = response.data.results.filter(function (fee) {
-                return fee.user == user1.id && fee.totalFees != 0;
+                return fee.user == user1.id;
               });
               this.$store.state.user = this.user;
             });
